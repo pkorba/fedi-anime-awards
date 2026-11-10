@@ -122,7 +122,7 @@ input[type="checkbox"] {
     -webkit-line-clamp: 2;
 }
 
-.back-to-top {
+.fedi-awards-back-to-top {
     display: block;
     width: fit-content;
     margin: 0 auto;
