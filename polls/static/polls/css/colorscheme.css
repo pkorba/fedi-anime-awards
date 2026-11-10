@@ -1,0 +1,102 @@
+@font-face {
+  font-family: "Droid Sans";
+  src: url("../fonts/DroidSans-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+    --primary-btn-bg-color: #00a846;
+    --primary-btn-bg-hover-color: #008638;
+    --primary-btn-color: #ffffff;
+    --secondary-btn-color: #00a846;
+    --secondary-btn-bg-color: #ffffff;
+    --secondary-btn-hover-color: #ffffff;
+    --secondary-btn-bg-hover-color: #00a846;
+    --bg-color: #f8f9fa;
+    --website-bg-color: #ffffff;
+    --active-color: #f1641e;
+    --textbox-bg-color: #ffffff;
+    --text-color: #000000;
+    --warning-color: crimson;
+    --error-color: red;
+    --table-bg-color: #2563eb;
+    --border-color: #ccc;
+    --thead-bg-color: #eef2f7;
+    --tbody-bg-even-color: #f7f9fc;
+    --tbody-bg-hover-color: #eaf1ff;
+    --poster-frame-color: #eee;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+        --primary-btn-bg-color: #adb5bd;
+        --primary-btn-bg-hover-color: #b9c0c7;
+        --primary-btn-color: #222222;
+        --secondary-btn-color: #adb5bd;
+        --secondary-btn-bg-color: #222222;
+        --secondary-btn-hover-color: #222222;
+        --secondary-btn-bg-hover-color: #adb5bd;
+        --website-bg-color: #222222;
+        --bg-color: #303030;
+        --active-color: #00bc8c;
+        --textbox-bg-color: #444444;
+        --text-color: #ffffff;
+        --warning-color: crimson;
+        --error-color: red;
+        --table-bg-color: #2563eb;
+        --thead-bg-color: #263449;
+        --tbody-bg-even-color: #1c2636;
+        --tbody-bg-hover-color: #293b55;
+        --poster-frame-color: #eee;
+	}
+}
+
+html {
+    font-family: "Droid Sans", "Twemoji Mozilla", "Noto Color Emoji",
+    "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+    font-size: 16px;
+    color: var(--text-color)
+}
+
+body {
+    margin: 0.2rem 0.2rem;
+    color: var(--text-color);
+    background: var(--website-bg-color);
+}
+
+h1 {
+    text-align: center;
+}
+
+.external-url {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+}
+
+.external-url::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 1.8rem;
+  aspect-ratio: 1;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  background: var(--active-color);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.7);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.external-url img {
+  display: block;
+}
+
+.external-url:hover::before,
+.external-url:focus-visible::before {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}

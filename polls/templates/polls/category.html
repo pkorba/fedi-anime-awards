@@ -1,0 +1,117 @@
+<html lang="en">
+{% load static %}
+{{ max_selections|json_script:"max-selections" }}
+<head>
+    <title>Fediverse Anime Awards - {{ active_category.name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'polls/css/colorscheme.css' %}">
+    <link rel="stylesheet" href="{% static 'polls/css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'polls/css/shared.css' %}">
+    <link rel="stylesheet" href="{% static 'polls/css/category.css' %}">
+    <link rel="icon" href="{% static 'polls/images/favicon.ico' %}" sizes="any">
+</head>
+<body>
+<a id="top"></a>
+{% include "polls/_navbar.html" %}
+
+<form method="post" id="nomination-form">
+    {% csrf_token %}
+    <label for="s-search">Filter shows</label>
+    <input
+            type="search"
+            id="s-search"
+            placeholder="Type a show name"
+            autocomplete="off"
+    >
+
+    <small>
+        ℹ️ Your choices are saved automatically. Selected items are moved to the beginning of the list. A floating toolbar containing
+        the list of selected items serves only as a preview.
+    </small>
+
+    <div id="selected-tray" class="selected-tray" hidden>
+        <span>
+            <strong>Selected: </strong>
+            <span id="selection-count" aria-live="polite">0/{{ max_selections }} </span>
+            <span id="save-status" aria-live="polite"></span>
+        </span>
+        <div id="selected-items" class="selected-items" aria-live="polite"></div>
+    </div>
+
+    <fieldset>
+        {% for entry in entries %}
+            <div class="s-option">
+                <input
+                        type="checkbox"
+                        class="selection-choice"
+                        name="selected_entries"
+                        id="show-{{ entry.pk }}"
+                        value="{{ entry.pk }}"
+                        {% if entry.pk in selected_option_ids %}checked{% endif %}
+                >
+                <label for="show-{{ entry.pk }}" class="show-option-label">
+                    <span class="poster-frame">
+                        {% if entry.show.poster %}
+                            <img
+                                    src="{{ entry.show.poster.url }}"
+                                    alt=""
+                                    width="141"
+                                    height="200"
+                                    loading="lazy"
+                            >
+                        {% endif %}
+                    </span>
+                    <span class="s-title">{{ entry.show }}</span>
+                </label>
+                <br>
+                <a class="external-url" href="https://anilist.co/anime/{{ entry.show.al_id }}"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="Open {{ entry.title }} on AniList">
+                    <picture>
+                        <source
+                                srcset="{% static 'polls/images/al_logo_dark.png' %}"
+                                media="(prefers-color-scheme: dark)"
+                        >
+                        <img
+                                src="{% static 'polls/images/al_logo_light.png' %}"
+                                alt="AniList logo"
+                                width="16"
+                                height="12"
+                                loading="lazy"
+                        >
+                    </picture>
+                </a>
+                {% if entry.show.mal_id %}
+                    <a class="external-url"
+                       href="https://myanimelist.net/anime/{{ entry.show.mal_id }}" target="_blank"
+                       rel="noopener noreferrer"
+                       aria-label="Open {{ entry.title }} on MyAnimeList">
+                        <picture>
+                            <source
+                                    srcset="{% static 'polls/images/mal_logo_dark.png' %}"
+                                    media="(prefers-color-scheme: dark)"
+                            >
+                            <img
+                                    src="{% static 'polls/images/mal_logo_light.png' %}"
+                                    alt="MyAnimeList logo"
+                                    width="26"
+                                    height="12"
+                                    loading="lazy"
+                            >
+                        </picture>
+                    </a>
+                {% endif %}
+            </div>
+        {% empty %}
+            <div>No options in this category yet.</div>
+        {% endfor %}
+    </fieldset>
+    {% if not finals_enabled %}
+        <a class="back-to-top" href="#top">Back to top</a>
+    {% endif %}
+</form>
+</body>
+
+<script type="module" src="{% static 'polls/js/category.js' %}"></script>
+</html>

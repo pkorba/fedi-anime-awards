@@ -1,0 +1,143 @@
+{% extends "admin/index.html" %}
+{% load i18n %}
+{% load import_status %}
+
+{% block bodyclass %}{{ block.super }} app-{{ app_label }}{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <style>
+        .spinner {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            margin-left: 0.5em;
+            border: 2px solid currentColor;
+            border-right-color: transparent;
+            border-radius: 50%;
+            vertical-align: middle;
+            animation: spin 0.7s linear infinite;
+        }
+
+        .spinner[hidden] {
+            display: none;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+{% endblock %}
+
+{% if not is_popup %}
+    {% block nav-breadcrumbs %}
+        <nav aria-label="{% translate 'Breadcrumbs' %}">
+            <ol class="breadcrumbs">
+                <li><a href="{% url 'admin:index' %}">{% translate 'Home' %}</a></li>
+                <li aria-current="page">
+                    {% for app in app_list %}{{ app.name }}
+                    {% endfor %}
+                </li>
+            </ol>
+        </nav>
+    {% endblock %}
+{% endif %}
+
+{% block content %}
+    {% get_import_state as import_state %}
+
+    <div class="module">
+        <h2>Data import status</h2>
+
+        {% if import_state %}
+            <p>
+                {{ import_state.get_status_display }}
+                {% if import_state.label %} – {{ import_state.label }}{% endif %}
+            </p>
+            <p>Last updated: {{ import_state.updated_at|date:"DATETIME_FORMAT" }}</p>
+
+            {% if import_state.status == "FAILED" %}
+                <p class="errornote">
+                    The last import failed ({{ import_state.error_type }}).
+                    Check the worker logs for details.
+                </p>
+            {% endif %}
+        {% else %}
+            <p>No import has been run yet.</p>
+        {% endif %}
+    </div>
+    <p><a href="{% url 'polls_results' %}">SHOW RESULTS</a></p>
+    {{ block.super }}
+    {% if not has_shows %}
+        <form id="download-form" action="{% url 'polls_download_data' %}" method="post">
+            {% csrf_token %}
+
+            <label for="year">AniList year:</label>
+            <select name="year" id="year" required>
+                <option value="" disabled selected>Choose a year</option>
+                <option value="2030">2030</option>
+                <option value="2029">2029</option>
+                <option value="2028">2028</option>
+                <option value="2027">2027</option>
+                <option value="2026">2026</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+            </select>
+
+            <button id="download-button" type="submit" class="button">
+                Populate the database
+                <span id="loading-spinner" class="spinner" hidden></span>
+                <span class="visually-hidden" role="status">Loading…</span>
+            </button>
+        </form>
+    {% else %}
+        <form id="download-single-form" action="{% url 'polls_download_single_data' %}"
+              method="post">
+            {% csrf_token %}
+
+            <label for="anilist_id">AniList ID:</label>
+            <input
+                    type="number"
+                    name="anilist_id"
+                    id="anilist_id"
+                    step="1"
+                    placeholder="Enter an Anilist ID"
+                    required
+            >
+
+            <button id="download-single-button" type="submit" class="button">
+                Add anime
+            </button>
+        </form>
+    {% endif %}
+    {% if has_nominations %}
+        <br>
+        <form id="select-finalists-form" action="{% url 'polls_select_finalists' %}" method="post">
+            {% csrf_token %}
+            <button id="select-finalists-button" type="submit" class="button">
+                Switch to finals
+            </button>
+        </form>
+    {% endif %}
+{% endblock %}
+{% block extrahead %}
+    {{ block.super }}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("download-form");
+            const button = document.getElementById("download-button");
+            const spinner = document.getElementById("loading-spinner");
+
+            if (form) {
+                form.addEventListener("submit", function () {
+                    button.disabled = true;
+                    spinner.hidden = false;
+                });
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block sidebar %}{% endblock %}

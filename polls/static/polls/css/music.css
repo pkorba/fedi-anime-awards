@@ -1,0 +1,61 @@
+.nominations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.nominations-list .s-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.finals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11.25rem), 1fr));
+    gap: 0.5rem 0.2rem;
+    border: 0;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.song-option-label {
+    cursor: pointer;
+}
+
+.finals-grid .song-option-label {
+    display: inline-flex;
+    max-width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+}
+
+.finals-grid .selection-choice {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 1;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0;
+}
+
+.s-option[hidden] {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .finals-grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+    }
+
+    .finals-grid .s-option {
+        width: min(11.25rem, 100%);
+    }
+
+    .finals-grid .song-option-label {
+        width: 100%;
+        max-width: 100%;
+    }
+}

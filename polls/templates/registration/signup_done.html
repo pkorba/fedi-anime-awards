@@ -1,0 +1,24 @@
+<html lang="en">
+{% load static %}
+<head>
+    <title>Fediverse Anime Awards - Sign Up Successful</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'polls/css/colorscheme.css' %}">
+    <link rel="stylesheet" href="{% static 'polls/css/index.css' %}">
+    <link rel="icon" href="{% static 'polls/images/favicon.ico' %}" sizes="any">
+</head>
+<body>
+<main class="page">
+    <h2>Your account has been successfully created</h2>
+    <p>
+        Your account has been created. We have sent a private message to your Lemmy/Piefed/Mbin
+        account containing the password you need to log in.<br>
+        On desktop, you can find your private messages by clicking a bell icon in the top-right
+        corner of the screen.
+    </p>
+    <p>
+        <a href="{% url 'home_login' %}">Go to the login form</a>
+    </p>
+</main>
+</body>
+</html>

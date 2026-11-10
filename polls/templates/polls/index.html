@@ -1,0 +1,139 @@
+{% load static %}
+<html lang="en">
+<head>
+    <title>Fediverse Anime Awards - {{ year }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'polls/css/colorscheme.css' %}">
+    <link rel="stylesheet" href="{% static 'polls/css/index.css' %}">
+    <link rel="icon" href="{% static 'polls/images/favicon.ico' %}" sizes="any">
+</head>
+<body>
+<main class="page">
+    {% block content %}
+        {% if user.is_authenticated %}
+            <h1>Fediverse Anime Awards {{ year }}</h1>
+            <p>Logged in as <strong>{{ user.username }}</strong></p>
+
+            {% if voting_enabled or user.is_staff %}
+                <div>
+                    <p>Ready to go? Click START to begin voting!</p>
+
+                    <a class="button primary-button" href="{% url 'category_poll' category_id=1 %}">START</a>
+                </div>
+            {% else %}
+                <p class="warning"><strong>VOTING IS CURRENTLY DISABLED</strong></p>
+            {% endif %}
+
+            {% if user.is_staff %}
+                <p><a class="button secondary-button" href="{% url 'admin:index' %}">Admin
+                    panel</a></p>
+            {% endif %}
+
+            <p><a class="button secondary-button" href="{% url 'user_polls_results' %}">Show my
+                votes</a></p>
+            <p><a class="button secondary-button" href="{% url 'password_change' %}">Change
+                password</a></p>
+
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button class="button secondary-button" type="submit">Log out</button>
+            </form>
+            <div>
+                <h2>Voting instructions</h2>
+                <ol class="list-regular">
+                    <li>
+                        During the nominations, you may select up to 5 items in each
+                        category (you can choose fewer, or none at all), whereas in the
+                        final round, you may select only one item per category.
+                    </li>
+                    <li>
+                        There is no button in the form to save your choices.
+                        All your votes are saved automatically the moment you select or
+                        deselect an item.
+                    </li>
+                    <li>
+                        On every page there's a search bar which allows you to filter
+                        visible entries. On the Character and Voice Performance pages,
+                        you must enter a search term to display any items, as there
+                        are too many to show the entire list at once.
+                    </li>
+                    <li>
+                        If an error occurs during the saving process, you will be notified
+                        via a ❌ icon in the area that lists your currently selected items.
+                    </li>
+                    <li>
+                        Icon 🔄 means that changes are awaiting to be saved. Don't close
+                        the browser tab in this state, because you might lose your changes.
+                        Navigating to a different category or home page is fine.
+                    </li>
+                    <li>
+                        Icon ✅ means that changes were successfully saved.
+                    </li>
+                    <li>
+                        Selected items are moved to the top of the list.
+                    </li>
+                    <li>
+                        All your choices will be displayed in a summary at the end of the
+                        voting process.
+                    </li>
+                    <li>
+                        You can review your choices at any time by clicking the
+                        <i>Show my votes</i> button above.
+                    </li>
+                    <li>
+                        You may change your choices at any time, as long as the voting
+                        remains open. Clicking START button does not clear any of your
+                        previous choices.
+                    </li>
+                    <li>
+                        On the page listing all your votes, there is a button that allows
+                        you to copy your votes as Markdown-formatted text. This is a small
+                        convenience in case you’d like to share your votes on a forum or
+                        on AniList. It has no impact on the validity of your ballot.
+                    </li>
+                </ol>
+            </div>
+        {% else %}
+            <img
+                    src="{% static 'polls/images/fedi-awards-logo.webp' %}"
+                    alt="Fediverse Anime Awards 2026 Logo"
+                    width="600"
+                    height="489"
+                    loading="lazy"
+            >
+            {% if not voting_enabled %}
+                <p class="warning"><strong>VOTING IS CURRENTLY DISABLED</strong></p>
+            {% endif %}
+
+            <div>
+                <small>
+                    ℹ️ Please do not use your Fediverse account details to log in.
+                    Participating in the vote requires creating a new account on this site.
+                </small>
+
+                <form method="post" action="{% url 'home_login' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="hidden" name="next" value="{{ next }}">
+                    <button class="button primary-button" type="submit">Log in</button>
+                </form>
+
+                <p><a href="{% url 'password_reset' %}">I don't remember my password</a></p>
+            </div>
+
+            <div>
+                <p>
+                    If this is your first visit, you need to sign up first.
+                </p>
+                <a class="button primary-button" href="{% url 'signup' %}">Sign up</a>
+            </div>
+        {% endif %}
+    {% endblock %}
+</main>
+</body>
+<footer>
+    <a href="{% url 'policies' %}#terms" target="_blank">Terms of Service</a>
+    <a href="{% url 'policies' %}#privacy" target="_blank">Privacy Policy</a>
+    <a href="https://github.com/pkorba/fedi-anime-awards" target="_blank">GitHub</a>
+</footer>
+</html>

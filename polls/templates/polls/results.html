@@ -1,0 +1,178 @@
+<html lang="en">
+{% load static %}
+<head>
+    <title>Fediverse Anime Awards - {{ year }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'polls/css/colorscheme.css' %}">
+    <link rel="stylesheet" href="{% static 'polls/css/index.css' %}">
+    <link rel="icon" href="{% static 'polls/images/favicon.ico' %}" sizes="any">
+</head>
+<body>
+<a id="top"></a>
+<main class="page">
+    {% if full %}
+        <a class="button primary-button"
+           href="{% url 'admin:app_list' app_label='polls' %}">Back</a>
+    {% else %}
+        <a class="button primary-button" href="{% url 'home_login' %}">Home</a>
+    {% endif %}
+    <h1>Fediverse Anime Awards {{ year }}</h1>
+    <h2>{% if full %}Full Results{% else %}{{ user.username }} votes{% endif %}</h2>
+    {% if not full %}
+        <small>
+            ℹ️ All your choices have been saved automatically. You can verify that they have been
+            saved correctly by checking the list{% if final_enabled %}s{% endif %} below.
+        </small>
+    {% endif %}
+
+    <h3>Copy {% if full %}results{% else %}your votes{% endif %} as Markdown:</h3>
+    <button
+            class="button secondary-button"
+            id="nomination-results-button"
+            data-final="false"
+    >
+        Nominations
+    </button>
+
+    {% if final_enabled %}
+        <button
+                class="button secondary-button"
+                id="final-results-button"
+                data-final="true"
+        >
+            Finals
+        </button>
+        <h2>Finals</h2>
+        {% for category_pair, category in finals.items %}
+            <table>
+                <colgroup>
+                    {% if full %}
+                        <col style="width: 15%;">
+                    {% endif %}
+                    <col style="width: {% if full %}65%{% else %}100%{% endif %};">
+                    {% if full %}
+                        <col style="width: 20%;">
+                    {% endif %}
+                </colgroup>
+                <thead>
+                <tr>
+                    <th {% if full %} colspan="3" {% else %} colspan="1" {% endif %}>
+                        <a href="{% url 'category_poll' category_pair.1 %}">{{ category_pair.0 }}</a>
+                    </th>
+                </tr>
+                <tr>
+                    {% if full %}
+                        <th>Place</th>
+                    {% endif %}
+                    <th>Name</th>
+                    {% if full %}
+                        <th>Votes</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in category %}
+                    <tr>
+                        {% if full %}
+                            <td>{{ item.rank }}</td>
+                        {% endif %}
+                        <td>{{ item.name }}</td>
+                        {% if full %}
+                            <td>{{ item.votes }}</td>
+                        {% endif %}
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td {% if full %} colspan="3" {% else %} colspan="1" {% endif %}>No results
+                            for this category.
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    {% endif %}
+
+
+    <h2>Nominations</h2>
+    {% for category_pair, category in nominations.items %}
+        <table>
+            <colgroup>
+                <col style="width: 15%;">
+                <col style="width: {% if full %}65%{% else %}85%{% endif %};">
+                {% if full %}
+                    <col style="width: 20%;">
+                {% endif %}
+            </colgroup>
+            <thead>
+            <tr>
+                <th {% if full %} colspan="3" {% else %} colspan="2" {% endif %}>
+                    <a href="{% url 'category_poll' category_pair.1 %}">{{ category_pair.0 }}</a>
+                </th>
+            </tr>
+            <tr>
+                <th>{% if full %}Place{% else %}No.{% endif %}</th>
+                <th>Name</th>
+                {% if full %}
+                    <th>Votes</th>
+                {% endif %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in category %}
+                <tr>
+                    <td>{% if full %}{{ item.rank }}{% else %}{{ forloop.counter }}{% endif %}</td>
+                    <td>{{ item.name }}</td>
+                    {% if full %}
+                        <td>{{ item.votes }}</td>
+                    {% endif %}
+                </tr>
+            {% empty %}
+                <tr>
+                    <td {% if full %} colspan="3" {% else %} colspan="2" {% endif %}>No results for
+                        this category.
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+<a href="#top">Back to top</a>
+</main>
+</body>
+<script>
+    async function handleCopy(event) {
+        const button = event.currentTarget;
+        const params = new URLSearchParams({
+            final: button.dataset.final,
+        });
+
+        try {
+            const response = await fetch(
+                {% if full %}
+                    `{% url 'results_admin_md' %}?${params.toString()}`
+                        {% else %}
+                        `{% url 'results_md' %}?${params.toString()}`
+                {% endif %}
+            );
+            if (!response.ok) throw new Error("Could not fetch the data");
+
+            const data = await response.json();
+            await navigator.clipboard.writeText(data.text);
+            let buttonText = button.textContent;
+            button.textContent = "Copied!";
+            setTimeout(() => {
+                button.textContent = buttonText;
+            }, 2000);
+        } catch (error) {
+            console.error(error);
+            button.textContent = "Copy failed";
+        }
+    }
+
+    document.getElementById("nomination-results-button").addEventListener("click", handleCopy);
+    {% if final_enabled %}
+        document.getElementById("final-results-button").addEventListener("click", handleCopy);
+    {% endif %}
+</script>
+</html>

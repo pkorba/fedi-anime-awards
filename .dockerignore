@@ -1,0 +1,11 @@
+.env
+.env.example
+.git
+.idea
+.venv
+README.md
+__pycache__/
+*.py[cod]
+db.sqlite3
+staticfiles/
+media/

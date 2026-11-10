@@ -1,0 +1,110 @@
+<html lang="en">
+{% load static %}
+{{ max_selections|json_script:"max-selections" }}
+<head>
+    <title>Fediverse Anime Awards - {{ active_category.name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'polls/css/colorscheme.css' %}">
+    <link rel="stylesheet" href="{% static 'polls/css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'polls/css/characters.css' %}">
+    <link rel="icon" href="{% static 'polls/images/favicon.ico' %}" sizes="any">
+</head>
+<body>
+{% include "polls/_navbar.html" %}
+
+<main id="nomination-block">
+    <form method="get" id="character-search">
+        <label for="search-query">Search voice performances</label>
+        <input
+                type="search"
+                id="search-query"
+                name="q"
+                value="{{ search_query }}"
+                placeholder="Enter at least 2 characters"
+                autocomplete="off"
+        >
+        <button class="button primary-button" type="submit">Search</button>
+    </form>
+
+    {% if search_query|length < 2 and not selected_option_ids and not finals_enabled %}
+        <p>Enter at least 2 characters to find options.</p>
+    {% endif %}
+
+    <small>
+        ℹ️ Your choices are saved automatically. Selected items are moved to the beginning of the list. A floating toolbar containing
+        the list of selected items serves only as a preview.
+    </small>
+
+    <form method="post" id="nomination-form">
+        {% csrf_token %}
+
+        <div id="selected-tray" class="selected-tray" hidden>
+            <span>
+                <strong>Selected:</strong>
+                <span id="selection-count" aria-live="polite">0/{{ max_selections }}</span>
+                <span id="save-status" aria-live="polite"></span>
+            </span>
+            <div id="selected-items" class="selected-items" aria-live="polite"></div>
+        </div>
+
+        <fieldset class="{% if finals_enabled %}finals-grid{% else %}nominations-list{% endif %}">
+            {% for entry in entries %}
+                <div class="character-option">
+                    <input
+                            type="checkbox"
+                            class="selection-choice"
+                            name="selected_entries"
+                            id="va-{{ entry.pk }}"
+                            value="{{ entry.pk }}"
+                            {% if entry.pk in selected_option_ids %}checked{% endif %}
+                    >
+                    {% if finals_enabled %}
+                        <label for="va-{{ entry.pk }}" class="character-option-label">
+                            <span class="poster-frame">
+                                {% if entry.character.picture %}
+                                    <img src="{{ entry.character.picture.url }}" alt=""
+                                         loading="lazy">
+                                {% endif %}
+                            </span>
+                            <span class="character-title">{{ entry }}</span>
+                        </label>
+                    {% else %}
+                        <label for="va-{{ entry.pk }}" class="character-option-label">
+                            <span class="character-title">{{ entry }}</span>
+                        </label>
+                    {% endif %}
+                    <br>
+                    <a class="external-url" href="https://anilist.co/staff/{{ entry.al_id }}"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       aria-label="Open {{ entry.title }} on AniList">
+                        <picture>
+                            <source
+                                    srcset="{% static 'polls/images/al_logo_dark.png' %}"
+                                    media="(prefers-color-scheme: dark)"
+                            >
+                            <img
+                                    src="{% static 'polls/images/al_logo_light.png' %}"
+                                    alt="AniList logo"
+                                    width="16"
+                                    height="12"
+                                    loading="lazy"
+                            >
+                        </picture>
+                    </a>
+                </div>
+            {% empty %}
+                {% if search_query|length >= 2 %}
+                    <p>No matching voice actors found.</p>
+                {% endif %}
+            {% endfor %}
+        </fieldset>
+    </form>
+
+    {% if has_more %}
+        <p>Showing the first 100 matches. Refine your search to narrow the results.</p>
+    {% endif %}
+</main>
+</body>
+<script type="module" src="{% static 'polls/js/characters.js' %}"></script>
+</html>

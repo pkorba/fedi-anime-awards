@@ -1,0 +1,44 @@
+* {
+    box-sizing: border-box;
+}
+
+fieldset {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11.25rem), 1fr));
+    gap: 0.5rem 0.2rem;
+}
+
+.show-option-label {
+    display: inline-flex;
+    max-width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    cursor: pointer;
+}
+
+.selection-choice {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 1;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0;
+    accent-color: var(--active-color);
+}
+
+@media (max-width: 600px) {
+    fieldset {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+    }
+
+    .s-option {
+        width: min(11.25rem, 100%);
+    }
+
+    .show-option-label {
+        width: 100%;
+        max-width: 100%;
+    }
+}

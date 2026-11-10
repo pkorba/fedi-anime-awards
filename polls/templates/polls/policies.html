@@ -1,0 +1,45 @@
+<html lang="en">
+{% load static %}
+<head>
+    <title>Fediverse Anime Awards - {{ year }} ToS and Privacy Policy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'polls/css/colorscheme.css' %}">
+    <link rel="stylesheet" href="{% static 'polls/css/index.css' %}">
+    <link rel="icon" href="{% static 'polls/images/favicon.ico' %}" sizes="any">
+</head>
+<body>
+<main class="page">
+<h2 id="terms">Terms of Service</h2>
+<p>
+    By registering or voting on Fediverse Anime Awards, you agree to use the site honestly and
+    follow the poll rules.
+</p>
+<p>You may cast a vote from only one account. Creating multiple accounts is prohibited.</p>
+<p>Your Lemmy, Piefed, or Mbin username becomes your username on this site.</p>
+<p>Do not submit votes for other people or try to manipulate the results.</p>
+<p>
+    We may suspend or remove accounts or votes that we reasonably believe violate these terms or
+    undermine the poll.
+</p>
+<p>
+    If you have any questions, contact
+    <a href="{{ contact_url }}" target="_blank">{{ contact_username }}</a>.
+</p>
+
+<h2 id="privacy">Privacy Policy</h2>
+<p>
+    We collect the username you provide to create and authenticate your account, and your votes
+    to run the poll.
+</p>
+<p>
+    We publish poll results only as totals, not as individual votes. We do not use analytics
+    or advertising.
+</p>
+<p>
+    We keep this information until the poll ends and results are published. To ask about or
+    delete your account, contact
+    <a href="{{ contact_url }}" target="_blank">{{ contact_username }}</a>.
+</p>
+</main>
+</body>
+</html>

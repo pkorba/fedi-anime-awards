@@ -1,0 +1,17 @@
+{{ website_main_host }} {
+    encode zstd gzip
+
+    handle_path /static/* {
+        root * /srv
+        file_server
+    }
+
+    handle_path /media/* {
+        root * /media
+        file_server
+    }
+
+    handle {
+        reverse_proxy web:8000
+    }
+}

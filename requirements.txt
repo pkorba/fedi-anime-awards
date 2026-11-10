@@ -1,0 +1,6 @@
+Django>=6.1,<7.0
+django-tasks-db>=0.13.0
+gunicorn
+pillow
+pythorhead
+requests

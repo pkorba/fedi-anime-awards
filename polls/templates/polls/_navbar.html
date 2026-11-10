@@ -1,0 +1,60 @@
+<nav aria-label="Poll categories" class="categories">
+    <div class="category-links">
+        {% for category in categories %}
+            <a href="{% url 'category_poll' category.pk %}"
+               {% if active_page == "category" and category.pk == active_category.pk %}aria-current="page"{% endif %}>
+                {{ category.name }}
+            </a>
+        {% endfor %}
+
+        <a href="{% url 'category_poll' characters_id %}"
+           {% if active_page == "characters" %}aria-current="page"{% endif %}>
+            Characters
+        </a>
+
+        <a href="{% url 'category_poll' people_id %}"
+           {% if active_page == "people" %}aria-current="page"{% endif %}>
+            Voice Performance
+        </a>
+
+        <a href="{% url 'category_poll' music_id %}"
+           {% if active_page == "music" %}aria-current="page"{% endif %}>
+            Musical Sequence
+        </a>
+    </div>
+
+    <select class="category-select" aria-label="Poll category"
+            onchange="if (this.value) window.location.href = this.value">
+        {% for category in categories %}
+            <option value="{% url 'category_poll' category.pk %}"
+                    {% if active_page == "category" and category.pk == active_category.pk %}selected{% endif %}>
+                {{ category.name }}
+            </option>
+        {% endfor %}
+        <option value="{% url 'category_poll' characters_id %}"
+                {% if active_page == "characters" %}selected{% endif %}>Character
+        </option>
+        <option value="{% url 'category_poll' people_id %}"
+                {% if active_page == "people" %}selected{% endif %}>Voice Performance
+        </option>
+        <option value="{% url 'category_poll' music_id %}"
+                {% if active_page == "music" %}selected{% endif %}>Musical Sequence
+        </option>
+    </select>
+</nav>
+
+<nav aria-label="Page navigation" class="pager">
+    {% if previous_id %}
+        <a class="pager-button primary-button" href="{% url 'category_poll' previous_id %}">PREV</a>
+    {% else %}
+        <span class="pager-button is-disabled" aria-disabled="true">PREV</span>
+    {% endif %}
+
+    <a class="pager-button secondary-button" href="{% url 'home_login' %}">HOME</a>
+
+    {% if next_id %}
+        <a class="pager-button primary-button" href="{% url 'category_poll' next_id %}">NEXT</a>
+    {% else %}
+        <a class="pager-button primary-button" href="{% url 'user_polls_results' %}">END</a>
+    {% endif %}
+</nav>

@@ -1,0 +1,100 @@
+<html lang="en">
+{% load static %}
+{{ max_selections|json_script:"max-selections" }}
+<head>
+    <title>Fediverse Anime Awards - {{ active_category.name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'polls/css/colorscheme.css' %}">
+    <link rel="stylesheet" href="{% static 'polls/css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'polls/css/shared.css' %}">
+    <link rel="stylesheet" href="{% static 'polls/css/music.css' %}">
+    <link rel="icon" href="{% static 'polls/images/favicon.ico' %}" sizes="any">
+</head>
+<body>
+<a id="top"></a>
+{% include "polls/_navbar.html" %}
+
+<form method="post" id="nomination-form">
+    {% csrf_token %}
+
+    <label for="s-search">Filter songs</label>
+    <input
+            type="search"
+            id="s-search"
+            placeholder="Type a song title"
+            autocomplete="off"
+    >
+
+    <small>
+        ℹ️ Your choices are saved automatically. Selected items are moved to the beginning of the list. A floating toolbar containing
+        the list of selected items serves only as a preview.
+    </small>
+
+    <div id="selected-tray" class="selected-tray" hidden>
+        <span>
+            <strong>Selected:</strong>
+            <span id="selection-count" aria-live="polite">0/{{ max_selections }}</span>
+            <span id="save-status" aria-live="polite"></span>
+        </span>
+        <div id="selected-items" class="selected-items" aria-live="polite"></div>
+    </div>
+
+    <fieldset class="{% if finals_enabled %}finals-grid{% else %}nominations-list{% endif %}">
+        {% for entry in entries %}
+            <div class="s-option">
+                <input
+                        type="checkbox"
+                        class="selection-choice"
+                        name="selected_entries"
+                        id="song-{{ entry.pk }}"
+                        value="{{ entry.pk }}"
+                        {% if entry.pk in selected_option_ids %}checked{% endif %}
+                >
+
+                {% if finals_enabled %}
+                    <label for="song-{{ entry.pk }}" class="song-option-label">
+                        <span class="poster-frame">
+                            {% if entry.thumb %}
+                                <img src="{{ entry.thumb.url }}" alt="" loading="lazy">
+                            {% endif %}
+                        </span>
+                        <span class="s-title">{{ entry.title }}</span>
+                    </label>
+                    <br>
+                {% else %}
+                    <label for="song-{{ entry.pk }}" class="song-option-label">
+                        <span class="s-title">{{ entry.title }}</span>
+                    </label>
+                {% endif %}
+
+                {% if entry.url %}
+
+                    <a class="external-url" href="{{ entry.url }}" target="_blank"
+                       rel="noopener noreferrer" aria-label="Open {{ entry.title }}">
+                        <picture>
+                            <source
+                                    srcset="{% static 'polls/images/external-link-dark.png' %}"
+                                    media="(prefers-color-scheme: dark)"
+                            >
+                            <img
+                                    src="{% static 'polls/images/external-link-light.png' %}"
+                                    alt="MyAnimeList logo"
+                                    width="16"
+                                    height="16"
+                                    loading="lazy"
+                            >
+                        </picture>
+                    </a>
+                {% endif %}
+            </div>
+        {% empty %}
+            <div>No options in this category yet.</div>
+        {% endfor %}
+    </fieldset>
+    {% if not finals_enabled %}
+        <a class="back-to-top" href="#top">Back to top</a>
+    {% endif %}
+</form>
+</body>
+<script type="module" src="{% static 'polls/js/category.js' %}"></script>
+</html>

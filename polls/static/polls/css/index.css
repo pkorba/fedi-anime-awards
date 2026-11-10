@@ -1,0 +1,186 @@
+a:link,
+a:visited {
+    color: var(--active-color);
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.list-regular {
+    text-align: left;
+    margin: 1rem 0;
+}
+
+details {
+    margin: 1rem;
+}
+
+summary {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+table {
+    width: 100%;
+    max-width: 37.5rem;
+    margin: 1.25rem auto 2rem;
+    border-collapse: collapse;
+    background: var(--website-bg-color);
+    box-shadow: 0 2px 0.5rem rgb(0 0 0 / 10%);
+    table-layout: fixed;
+}
+
+th,
+td {
+    padding: 0.75rem 1rem;
+    border: 1px solid #d7dce2;
+}
+
+thead tr:first-child th {
+    background: var(--table-bg-color);
+    color: white;
+    font-size: 1.1rem;
+}
+
+thead tr:first-child th a {
+    color: white;
+}
+
+thead tr:first-child th a:hover,
+thead tr:first-child th a:focus-visible {
+    text-decoration: underline;
+}
+
+thead tr:nth-child(2) th {
+    background: var(--thead-bg-color);
+    text-align: center;
+}
+
+tbody tr:nth-child(even) {
+    background: var(--tbody-bg-even-color);
+}
+
+tbody tr:hover {
+    background: var(--tbody-bg-hover-color);
+}
+
+tbody td:first-child,
+tbody td:last-child {
+    text-align: center;
+}
+
+tbody td:nth-child(2) {
+    text-align: left;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+input[type="checkbox"] {
+    accent-color: var(--active-color);
+    cursor: pointer;
+}
+
+#username-hint,
+#username-error {
+    display: block;
+}
+
+#username-error {
+    color: red;
+}
+
+.page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid var(--primary-btn-bg-color);
+    border-radius: 0.5rem;
+    background: var(--bg-color);
+}
+
+.page form p {
+    margin: 1rem 0;
+}
+
+.page input[type="text"],
+.page input[type="password"],
+.page input[type="email"] {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 20rem;
+    min-height: 1.5rem;
+    margin: 0.4rem auto;
+    padding: 0.25rem 0.25rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--textbox-bg-color);
+    color: var(--text-color);
+    border-radius: 0.5rem;
+}
+
+.page input:focus {
+    outline: 2px solid var(--active-color);
+}
+
+.button {
+    display: inline-block;
+    box-sizing: border-box;
+    width: min(11rem, 100%);
+    padding: 0.5rem 1rem;
+    border: 0;
+    border-radius: 0.5rem;
+    color: var(--primary-btn-color);
+    font: inherit;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a.primary-button,
+.button > a {
+    color: var(--primary-btn-color);
+}
+
+.secondary-button {
+    background: var(--secondary-btn-bg-color);
+    border: 1px solid var(--primary-btn-bg-color);
+    color: var(--secondary-btn-color);
+}
+
+a.secondary-button {
+    color: var(--secondary-btn-color);
+}
+
+.primary-button {
+    background: var(--primary-btn-bg-color);
+}
+
+.primary-button:hover {
+    background: var(--primary-btn-bg-hover-color);
+}
+
+.secondary-button:hover {
+    background: var(--secondary-btn-bg-hover-color);
+    color: var(--primary-btn-color);
+}
+
+.warning {
+    color: var(--warning-color);
+}
+
+.error,
+.errorlist {
+    color: var(--error-color);
+}
+
+.errorlist {
+    text-align: left;
+}
