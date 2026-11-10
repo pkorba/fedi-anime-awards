@@ -59,7 +59,7 @@ The `.env` file contains following environment variables that need to be set.
 
 Changing the `SQLITE_PATH` requires correcting `compose.yaml` and `Dockerfile` to reflect those changes.
 
-In `Caddyfile` replace `{{ domain }}` with your website's domain name (e.g. `example.com`)
+In `Caddyfile` replace `{{ website_main_host }}` with your website's domain name (e.g. `example.com`)
 
 ## Admin workflow
 
