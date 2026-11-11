@@ -26,14 +26,14 @@
             {% endif %}
 
             {% if user.is_staff %}
-                <p><a class="button secondary-button" href="{% url 'admin:index' %}">Admin
-                    panel</a></p>
+                <div><a class="button secondary-button" href="{% url 'admin:index' %}">Admin
+                    panel</a></div>
             {% endif %}
 
-            <p><a class="button secondary-button" href="{% url 'user_polls_results' %}">Show my
-                votes</a></p>
-            <p><a class="button secondary-button" href="{% url 'password_change' %}">Change
-                password</a></p>
+            <div><a class="button secondary-button" href="{% url 'user_polls_results' %}">Show my
+                votes</a></div>
+            <div><a class="button secondary-button" href="{% url 'password_change' %}">Change
+                password</a></div>
 
             <form action="{% url 'logout' %}" method="post">
                 {% csrf_token %}
@@ -119,7 +119,7 @@
                     <button class="button primary-button" type="submit">Log in</button>
                 </form>
 
-                <p><a href="{% url 'password_reset' %}">I don't remember my password</a></p>
+                <a href="{% url 'password_reset' %}">I don't remember my password</a>
             </div>
 
             <div>
