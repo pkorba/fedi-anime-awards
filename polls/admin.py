@@ -26,24 +26,28 @@ class ShowAdmin(admin.ModelAdmin):
 class CategoryShowAdmin(admin.ModelAdmin):
     list_display = ["show", "category", "finalist"]
     search_fields = ["show__title_english", "show__title_romaji"]
+    list_editable = ["finalist"]
 
 
 @admin.register(Character)
 class CharacterAdmin(admin.ModelAdmin):
     list_display = ["al_id", "name", "show", "finalist"]
     search_fields = ["name"]
+    list_editable = ["finalist"]
 
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
     list_display = ["al_id", "name", "character", "finalist"]
     search_fields = ["name", "character__name"]
+    list_editable = ["finalist"]
 
 
 @admin.register(Music)
-class PersonAdmin(admin.ModelAdmin):
+class MusicAdmin(admin.ModelAdmin):
     list_display = ["title", "type", "url", "finalist"]
     search_fields = ["title"]
+    list_editable = ["finalist"]
 
 
 @admin.register(VotingConfig)
