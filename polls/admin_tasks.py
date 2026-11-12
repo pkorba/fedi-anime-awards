@@ -296,7 +296,7 @@ def get_admin_results_md(is_final: bool) -> str:
     for category_pair, category in user_votes.items():
         markdown += f"  \n## {category_pair[0]}  \n"
         if not category:
-            markdown += f"No results for this category.  \n  \n"
+            markdown += f"No results for this category.  \n"
         else:
             markdown += f"|Place|Name|Votes|  \n|-|-|-|  \n"
             for item in category:
