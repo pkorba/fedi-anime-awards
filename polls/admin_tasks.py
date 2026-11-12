@@ -288,20 +288,18 @@ def get_admin_results_md(is_final: bool) -> str:
     else:
         user_votes = _get_nominations(year)
 
-    markdown = f"## Fediverse Anime Awards {year}"
+    markdown = f"# Fediverse Anime Awards {year}"
     if not is_final:
         markdown += f" (Nominations)"
     markdown += f" - Full Results"
 
     for category_pair, category in user_votes.items():
-        markdown += f"  \n**{category_pair[0]}**  \n"
+        markdown += f"  \n## {category_pair[0]}  \n"
         if not category:
-            markdown += f"No results for this category.  \n"
+            markdown += f"No results for this category.  \n  \n"
         else:
+            markdown += f"|Place|Name|Votes|  \n|-|-|-|  \n"
             for item in category:
-                markdown += (
-                    f"{item['rank']}. {item['name']} "
-                    f"({item['votes']} vote{'s' if item['votes'] > 1 else ''})  \n"
-                )
+                markdown += f"|{item['rank']}.|{item['name']}|{item['votes']}|  \n"
 
     return markdown
