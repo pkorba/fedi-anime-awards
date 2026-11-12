@@ -699,11 +699,11 @@ def results_md(request):
         if not category:
             markdown += f"No results for this category.  \n"
         else:
-            for i, item in enumerate(category, start=1):
+            for item in category:
                 if is_final:
                     markdown += f"{item['name']}  \n"
                 else:
-                    markdown += f"{i}. {item['name']}  \n"
+                    markdown += f"- {item['name']}  \n"
 
     return JsonResponse({"text": markdown})
 
