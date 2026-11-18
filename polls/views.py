@@ -4,18 +4,20 @@ import secrets
 import string
 from collections import defaultdict
 from typing import Any, Tuple
+from urllib.parse import urljoin
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.cache import cache
-from django.conf import settings
 from django.db import transaction
 from django.db.models import Max, QuerySet
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponseBadRequest, Http404
 from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib.auth.forms import AuthenticationForm
+from django.templatetags.static import static
 from django.utils.translation import gettext_lazy
 
 from .models import (
@@ -52,6 +54,10 @@ class HomeLoginView(auth_views.LoginView):
         context = super().get_context_data(**kwargs)
         context["voting_enabled"] = VotingConfig.objects.get(pk=1).voting_enabled
         context["year"] = VotingConfig.objects.get(pk=1).current_year
+        context["og_image_url"] = urljoin(
+            self.request.build_absolute_uri("/"),
+            static("polls/images/fedi-awards-logo.webp"),
+        )
         return context
 
 
