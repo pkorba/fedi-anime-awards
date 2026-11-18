@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Merriweather";
+  src: url("../fonts/Merriweather-black-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 a:link,
 a:visited {
     color: var(--active-color);
@@ -184,4 +192,25 @@ a.secondary-button {
 
 .errorlist {
     text-align: left;
+}
+
+.fedi-logo-container {
+    container-type: inline-size;
+    position: relative;
+    text-align: center;
+}
+
+.fedi-logo-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -65%);
+    font-family: "Merriweather", serif;
+    font-size: clamp(2rem, 16cqw, 6rem);
+    line-height: 1;
+    color: #fffb96;
+}
+
+.fedi-logo-text-small {
+    font-size: clamp(1.25rem, 9.33cqw, 3.5rem);
 }

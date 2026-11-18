@@ -95,13 +95,18 @@
                 </ol>
             </div>
         {% else %}
-            <img
-                    src="{% static 'polls/images/fedi-awards-logo.webp' %}"
-                    alt="Fediverse Anime Awards 2026 Logo"
-                    width="600"
-                    height="489"
-                    loading="lazy"
-            >
+            <div class="fedi-logo-container">
+                <img
+                        src="{% static 'polls/images/fedi-awards-logo.webp' %}"
+                        alt="Fediverse Anime Awards Logo"
+                        width="600"
+                        height="490"
+                        loading="lazy"
+                >
+                <div class="fedi-logo-text">
+                    <span class="fedi-logo-text-small">Fediverse</span><br>Anime<br>Awards<br>{{ year }}
+                </div>
+            </div>
             {% if not voting_enabled %}
                 <p class="warning"><strong>VOTING IS CURRENTLY DISABLED</strong></p>
             {% endif %}
