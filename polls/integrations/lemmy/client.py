@@ -80,5 +80,5 @@ def _verify_account_age(creation_date: str, username: str) -> None:
     year = VotingConfig.objects.get(pk=1).current_year
     if date_obj > date(year, 12, 31):
         raise LemmyError(
-            f"Only accounts created before 1 Jan {year + 1} are allowed."
+            f"Only accounts created before 1 Jan {year + 1} are allowed to participate."
         )

@@ -555,7 +555,6 @@ def signup(request):
                     {
                         "username": username,
                         "error": str(e),
-                        "year": year + 1,
                     },
                 )
 
@@ -565,7 +564,6 @@ def signup(request):
     return render(request, "registration/signup.html", {
         "username": username,
         "error": error,
-        "year": year + 1,
     })
 
 

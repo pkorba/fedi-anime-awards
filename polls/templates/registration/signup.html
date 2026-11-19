@@ -12,8 +12,13 @@
 <main class="page">
     <h1>Sign Up</h1>
     <p>
-        <strong>Warning:</strong> Only users whose Lemmy/Piefed/Mbin accounts were created before 1
-        Jan {{ year }} are allowed to participate.
+        <small>
+            ℹ️ To create an account, you must provide your username (including the instance) from
+            Lemmy, Piefed, Mbin, or NodeBB. You will be creating a separate account, but your
+            username here will be the same as the one you use in the Fediverse. Upon registration,
+            you will receive a password for your account on this site via a private message sent to
+            your Fediverse account.
+        </small>
     </p>
     {% if error %}
         <p class="error" role="alert">{{ error }}</p>
@@ -61,14 +66,14 @@
         <h3>How does this registration form work?</h3>
         <ol class="list-regular">
             <li>
-                Enter a Lemmy/Piefed/Mbin username of an account that you control. For example:
-                <i>kurisu@ani.social</i>.
+                Enter a Lemmy/Piefed/Mbin/NodeBB username of an account that you control.
+                For example: <i>kurisu@ani.social</i>.
             </li>
             <li>Answer the control question.</li>
             <li>Agree to Terms of Service and Privacy Policy.</li>
             <li>Hit <i>Register</i> button.</li>
             <li>
-                Check your inbox on your Lemmy/Piefed/Mbin account. You will receive an
+                Check your inbox on your Lemmy/Piefed/Mbin/NodeBB account. You will receive an
                 automatically generated password there, sent to you by a bot. On desktop, you can
                 open your inbox by clicking the bell button in the top-right corner of the page.
             </li>
