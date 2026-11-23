@@ -44,7 +44,7 @@ def send_message(username: str, message: str, verify: bool = False) -> None:
     global _lemmy
 
     if not _lemmy:
-        _lemmy_login(30)
+        _lemmy_login(20)
 
     try:
         user = _lemmy.user.get(username=username)
