@@ -510,7 +510,6 @@ def category_poll(request, category_id):
 def signup(request):
     error = ""
     username = ""
-    year = VotingConfig.objects.get(pk=1).current_year
 
     if request.method == "POST":
         usernames = request.POST.getlist("username")
@@ -522,6 +521,24 @@ def signup(request):
         challenge = challenges[0].strip().casefold() if len(challenges) == 1 else ""
         agreed = agreements == ["on"]
 
+        # 7 s cooldown between requests of a single user
+        if request.session.session_key is None:
+            request.session.create()
+
+        key = f"signup:cooldown:{request.session.session_key}"
+
+        if not cache.add(key, True, timeout=7):
+            return render(
+                request,
+                "registration/signup.html",
+                {
+                    "username": username,
+                    "error": "Too many requests. Please wait a few seconds before trying again.",
+                },
+                status=429,
+            )
+
+        # Proceed with registration
         User = get_user_model()
 
         if not username:
