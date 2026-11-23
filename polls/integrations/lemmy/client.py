@@ -50,7 +50,7 @@ def send_message(username: str, message: str, verify: bool = False) -> None:
         user = _lemmy.user.get(username=username)
     except Exception:
         _lemmy = None
-        raise LemmyError(f"No valid username found for {username}.")
+        raise LemmyError(f"Fediverse account with username {username} not found.")
 
     user_id = user["person_view"]["person"]["id"]
     if not user_id:
