@@ -214,3 +214,9 @@ a.secondary-button {
 .fedi-logo-text-small {
     font-size: clamp(1.25rem, 9.33cqw, 3.5rem);
 }
+
+.register-button:disabled {
+    color: #999;
+    border-color: var(--border-color);
+    background: #f5f5f5;
+}

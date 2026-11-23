@@ -23,7 +23,7 @@
     {% if error %}
         <p class="error" role="alert">{{ error }}</p>
     {% endif %}
-    <form method="post">
+    <form method="post" id="registration-form">
         {% csrf_token %}
 
         <label for="username">Lemmy/Piefed/Mbin Username:</label>
@@ -57,7 +57,7 @@
             I agree to the <a href="{% url 'policies' %}#terms" target="_blank">Terms of Service</a>
             and <a href="{% url 'policies' %}#privacy" target="_blank">Privacy Policy</a>.
         </label></p>
-        <button class="button primary-button" type="submit">Register</button>
+        <button class="button primary-button register-button" type="submit">Register</button>
     </form>
 
     <div><a class="button secondary-button" href="{% url 'home_login' %}">Cancel</a></div>
@@ -124,5 +124,14 @@
             ? "Use the format username@instance.tld"
             : "";
     });
+
+    document.getElementById("registration-form").addEventListener("submit", function () {
+        const button = this.querySelector('button[type="submit"]');
+        if (button) {
+            button.disabled = true;
+            button.textContent = "Submitting…";
+        }
+    });
+
 </script>
 </html>
