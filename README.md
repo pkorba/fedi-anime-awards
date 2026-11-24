@@ -50,6 +50,7 @@ The `.env` file contains following environment variables that need to be set.
 |`LEMMY_INSTANCE`       |`string`     |Instance of the Lemmy bot account that is used to send private messages to users of the website.             |
 |`LEMMY_USERNAME`       |`string`     |Username (without `@instance.tld` part) of the Lemmy bot account that is used to send private messages to users of the website.             |
 |`LEMMY_PASSWORD`       |`string`     |Password of the Lemmy bot account that is used to send private messages to users of the website.             |
+|`LEMMY_COMMUNITY_ID`                       |`int`             |`community_view.community.id` from `/api/v3/community`. Upon user registration, the community with this ID will be checked to see if a ban has been imposed on the user.                                                                                                             |
 |`FEDI_ANIME_AWARDS_URL`       |`string`     |The address of a website that will be attached to private messages sent to Threadiverse users.             |
 |`CONTACT_URL`       |`string`     |Administrator's contact link (visible in ToS and Privacy Policy), e.g. link to a Lemmy profile.             |
 |`CONTACT_USERNAME`       |`string`     |Administrator's contact username (visible in ToS and Privacy Policy). This is what `CONTACT_URL` will look to the users.             |
