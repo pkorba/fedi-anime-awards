@@ -94,7 +94,7 @@ DATABASES = {
 TASKS = {
     "default": {
         "BACKEND": "django_tasks_db.DatabaseBackend",
-        "QUEUES": ["default"],
+        "QUEUES": ["admin", "messages"],
     }
 }
 

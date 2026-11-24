@@ -1,7 +1,5 @@
 import logging
 import re
-import secrets
-import string
 from collections import defaultdict
 from typing import Any, Tuple
 from urllib.parse import urljoin
@@ -17,6 +15,7 @@ from django.db.models import Max, QuerySet
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponseBadRequest, Http404
 from django.shortcuts import get_object_or_404, redirect, render
+from django.tasks import TaskResultStatus, default_task_backend
 from django.templatetags.static import static
 from django.utils.translation import gettext_lazy
 
@@ -30,7 +29,7 @@ from .models import (
     NominationSet,
     VotingConfig
 )
-from .services import register_username, LemmyError
+from .tasks import register_username
 
 logger = logging.getLogger(__name__)
 
@@ -554,28 +553,11 @@ def signup(request):
         elif User.objects.filter(username__iexact=username).exists():
             error = "That username is already taken."
         else:
-            user = User(username=username)
-            password = ''.join(
-                secrets.choice(string.ascii_lowercase + string.digits) for _ in range(10)
-            )
-            user.set_password(password)
+            year = VotingConfig.objects.get(pk=1).current_year
 
-            # send random password using pythorhead
-            # don't create the user if sending password fails
-            try:
-                register_username(username, password)
-            except LemmyError as e:
-                logger.exception("Registration failed: %s", e)
-                return render(
-                    request,
-                    "registration/signup.html",
-                    {
-                        "username": username,
-                        "error": str(e),
-                    },
-                )
+            result = register_username.enqueue(username, year)
+            request.session["signup_task_id"] = result.id
 
-            user.save()
             return redirect("signup_done")
 
     return render(request, "registration/signup.html", {
@@ -586,6 +568,33 @@ def signup(request):
 
 def signup_done(request):
     return render(request, "registration/signup_done.html")
+
+
+def signup_status(request):
+    task_id = request.session.get("signup_task_id")
+    if not task_id:
+        return JsonResponse({"status": "unknown"}, status=404)
+
+    result = default_task_backend.get_result(task_id)
+    result.refresh()
+
+    if result.status in (TaskResultStatus.READY, TaskResultStatus.RUNNING):
+        return JsonResponse({"status": "pending"})
+
+    if result.status == TaskResultStatus.FAILED:
+        return JsonResponse({
+            "status": "failed",
+            "message": "Signup failed. Please try again.",
+        })
+
+    outcome = result.return_value
+    if not outcome["ok"]:
+        return JsonResponse({
+            "status": "failed",
+            "message": outcome["message"],
+        })
+
+    return JsonResponse({"status": "succeeded"})
 
 
 MODEL_BY_CATEGORY_ID = {
@@ -727,6 +736,7 @@ def results_md(request):
                     markdown += f"- {item['name']}  \n"
 
     return JsonResponse({"text": markdown})
+
 
 def policies(request):
     return render(request, "polls/policies.html", {

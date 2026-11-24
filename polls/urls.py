@@ -9,6 +9,8 @@ urlpatterns = [
 
     path("signup/done", views.signup_done, name="signup_done"),
 
+    path("signup/status", views.signup_status, name="signup_status"),
+
     path("policies/", views.policies, name="policies"),
 
     path("polls/<int:category_id>/", views.category_poll, name="category_poll"),

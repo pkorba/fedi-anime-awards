@@ -2,7 +2,7 @@
 <html lang="en">
 {% load static %}
 <head>
-    <title>Fediverse Anime Awards - Sign Up Successful</title>
+    <title>Fediverse Anime Awards - Creating your account</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'polls/css/colorscheme.css' %}">
     <link rel="stylesheet" href="{% static 'polls/css/index.css' %}">
@@ -10,16 +10,27 @@
 </head>
 <body>
 <main class="page">
-    <h2>Your account has been successfully created</h2>
-    <p>
+    <h1>Creating your account</h1>
+    <p id="signup-status" role="status" aria-live="polite">
+        Your Fediverse account is being verified. Please wait…
+    </p>
+
+    <p id="signup-error" class="error" hidden></p>
+    <p id="signup-link" hidden><a href="{% url 'signup' %}">Go back to signup form</a></p>
+
+    <p id="signup-success" hidden>
         Your account has been created. We have sent a private message to your
         Lemmy/Piefed/Mbin/NodeBB account containing the password you need to log in.<br>
         On desktop, you can find your private messages by clicking a bell icon (notifications)
-        in the top-right corner of the screen.
-    </p>
-    <p>
+        in the top-right corner of the screen.<br><br>
         <a href="{% url 'home_login' %}">Go to the login form</a>
     </p>
 </main>
+<script
+        id="signup-done-script"
+        type="module"
+        src="{% static 'polls/js/signup_done.js' %}"
+        data-status-url="{% url 'signup_status' %}">
+</script>
 </body>
 </html>

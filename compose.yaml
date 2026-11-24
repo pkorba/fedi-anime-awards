@@ -28,7 +28,7 @@ services:
   worker:
     build: .
     env_file: .env
-    command: ["python", "manage.py", "db_worker"]
+    command: ["python", "manage.py", "db_worker", "--queue-name", "admin,messages"]
     volumes:
       - sqlite_data:/data
       - media_data:/app/media

@@ -65,12 +65,12 @@ def run_import(label, import_function, *args):
 
     _set_import_state(ImportState.Status.SUCCESSFUL, label=label)
 
-@task
+@task(queue_name="admin")
 def import_year(year: int) -> None:
     run_import(f"Year {year}", _download_from_api, year)
 
 
-@task
+@task(queue_name="admin")
 def import_single_show(anilist_id: int) -> None:
     run_import(
         f"AniList ID {anilist_id}",

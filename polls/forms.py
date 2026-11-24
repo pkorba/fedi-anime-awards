@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import PasswordResetForm
 from django.urls import reverse
 
-from .services import LemmyError, reset_password
+from .tasks import reset_password
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +63,4 @@ class LemmyPasswordResetForm(PasswordResetForm):
         )
 
         username = context["user"].get_username()
-        try:
-            reset_password(username, message)
-        except LemmyError as e:
-            logger.error("Username password reset failed: %s", e)
+        reset_password.enqueue(username, message)
