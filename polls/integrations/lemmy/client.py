@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime, date, timezone
+from typing import Any
 
 from django.conf import settings
 from pythorhead import Lemmy
@@ -58,16 +59,7 @@ def send_message(username: str, message: str, verify: bool = False) -> None:
 
     if verify:
         # Check if user is banned on instance or in chosen community
-        banned = user["person_view"]["person"]["banned"]
-        expires = user["person_view"]["person"].get("ban_expires", None)
-
-        if banned and not expires:
-            raise LemmyError(f"User {username} is banned.")
-        elif banned and expires:
-            expiration = _parse_date(expires, "ban expiration", username)
-            if expiration > datetime.now(timezone.utc):
-                raise LemmyError(f"User {username} is banned.")
-
+        _verify_instance_ban(user, username)
         _verify_community_ban(user_id, username)
 
         # Check if account age crosses the threshold
@@ -79,6 +71,18 @@ def send_message(username: str, message: str, verify: bool = False) -> None:
     except Exception:
         _lemmy = None
         raise LemmyError(f"Sending private message to {username} failed.")
+
+
+def _verify_instance_ban(user: Any, username: str) -> None:
+    banned = user["person_view"]["person"]["banned"]
+    expires = user["person_view"]["person"].get("ban_expires", None)
+
+    if banned and not expires:
+        raise LemmyError(f"User {username} is banned.")
+    elif banned and expires:
+        expiration = _parse_date(expires, "ban expiration", username)
+        if expiration > datetime.now(timezone.utc):
+            raise LemmyError(f"User {username} is banned.")
 
 
 def _verify_community_ban(user_id: int, username: str) -> None:
