@@ -13,9 +13,10 @@ from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Max, QuerySet
 from django.db.models import Q
-from django.http import JsonResponse, HttpResponseBadRequest, Http404
+from django.http import JsonResponse, HttpResponseBadRequest, Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.tasks import TaskResultStatus, default_task_backend
+from django.template.loader import render_to_string
 from django.templatetags.static import static
 from django.utils.translation import gettext_lazy
 
@@ -743,3 +744,10 @@ def policies(request):
         "contact_username": settings.CONTACT_USERNAME,
         "contact_url": settings.CONTACT_URL,
     })
+
+
+def robots_txt(request):
+    return HttpResponse(
+        render_to_string("polls/robots.txt"),
+        content_type="text/plain",
+    )

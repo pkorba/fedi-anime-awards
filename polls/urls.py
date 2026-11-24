@@ -72,4 +72,6 @@ urlpatterns = [
     path("results/", views.results, name="user_polls_results"),
 
     path("results_md/", views.results_md, name="results_md"),
+
+    path("robots.txt", views.robots_txt),
 ]
